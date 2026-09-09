@@ -32,8 +32,8 @@ PARTICIPANT_FIELDS = [
 SESSION_FIELDS = []
 THOUSAND_SEPARATOR = ''
 ROOMS = [
-    dict(name='Session-d', display_name='Session-d', participant_label_file='_rooms/Session-d.txt'),
-    dict(name='Session-nd', display_name='Session-nd', participant_label_file='_rooms/Session-nd.txt')
+    dict(name='Session1', display_name='Session1', participant_label_file='_rooms/Session1.txt'),
+    dict(name='Session2', display_name='Session2', participant_label_file='_rooms/Session2.txt')
 ]
 
 ADMIN_USERNAME = 'admin'

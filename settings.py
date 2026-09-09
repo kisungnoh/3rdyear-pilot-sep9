@@ -26,7 +26,10 @@ PARTICIPANT_FIELDS = [
 ]
 SESSION_FIELDS = []
 THOUSAND_SEPARATOR = ''
-ROOMS = []
+ROOMS = [
+    dict(name='Session1', display_name='Session1', participant_label_file='_rooms/Session1.txt'),
+    dict(name='Session2', display_name='Session2', participant_label_file='_rooms/Session2.txt')
+]
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable

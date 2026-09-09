@@ -4,7 +4,7 @@ SESSION_CONFIGS = [
                 dict(name='bank2_instruction_70nd', display_name='bank2_instruction_70nd', num_demo_participants=2, app_sequence=['bank2_instruction_70nd']),
                 dict(name='bank2_game_70nd', display_name='bank2_game_70nd', num_demo_participants=2, app_sequence=['bank2_game_70nd']),
                 dict(name='bank2_postgame_70nd', display_name='bank2_postgame_70nd', num_demo_participants=2, app_sequence=['bank2_postgame_70nd']),
-                dict(name='bank2_70nd_fullset', display_name='bank2_70nd_fullset', num_demo_participants=2, app_sequence=['bank2_instruction_70nd','bank2_game_70nd', 'bret', 'bank2_postgame_70nd']),
+                dict(name='bank2_70nd_fullset', display_name='bank2_70nd_fullset', num_demo_participants=2, app_sequence=['bank2_instruction_70nd','bank2_game_70nd', 'bank2_postgame_70nd']),
 
                 dict(name='bank2_instruction_70d', display_name='bank2_instruction_70d', num_demo_participants=2, app_sequence=['bank2_instruction_70d']),
                 dict(name='bank2_game_70d', display_name='bank2_game_70d', num_demo_participants=2, app_sequence=['bank2_game_70d']),

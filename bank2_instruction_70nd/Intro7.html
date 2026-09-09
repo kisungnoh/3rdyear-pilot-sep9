@@ -1,0 +1,70 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 1 Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+.stat-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px auto 20px;
+    table-layout: fixed;
+}
+.stat-table th, .stat-table td {
+    border: 0.5px solid #dde1e7;
+    text-align: center;
+    color: #1a1f2e;
+    padding: 8px 18px;
+}
+.stat-table thead th {
+    background: #f8f9fb;
+    font-weight: 600;
+}
+.stat-table tbody td {
+    background: #ffffff;
+}
+</style>
+
+<br>
+<p style="background: #e8f0fe; border:1px solid #9fa8da; border-radius:6px; padding:10px 14px; margin: 20px auto;">
+The summary below will be shown as a <b>Reminder</b> during the game.</p>
+
+<h5>Summary</h5>
+<ol style="line-height: 1.6;">
+    <li style="margin-bottom: 16px;">You will start a game with a randomly paired participant, who is likely to change from game to game.</li>
+    <li style="margin-bottom: 16px;">As a customer at a bank, you will decide whether to <b>withdraw</b> your money or <b>stay</b> with the bank across two periods:
+        <ul>
+            <li><b>W</b>: Withdraw (Period 1) </li>
+            <li><b>SW</b>: Stay (Period 1) → Withdraw (Period 2)</li>
+            <li><b>SS</b>: Stay (Period 1) → Stay (Period 2)</li>
+        </ul>
+    </li>
+    <li style="margin-bottom: 16px;">Your payoffs depend on Your Bank's state, your decision, and the decision of the other participant you are paired with.</li>
+    <li style="margin-bottom: 16px;">In today's experiment, the state of either the Other Bank or Your Bank is <b>unknown</b>. Therefore, you will need to make decisions (withdraw or stay) in each period under the uncertain state.</li>
+    <li style="margin-bottom: 16px;">To help you make decisions, you will see the <b>Other Bank withdrawals</b>, which show the final number of customers at the Other Bank who withdrew in either Period 1 or 2 <b>(W or SW)</b>.
+        <ul style="margin-bottom: 16px;">
+            <li>Participants at the Other Bank <b>knew</b> their bank's state exactly when making decisions.</li>
+        </ul>
+    </li>
+    <li style="margin-bottom: 16px;">The state of the <b>Other Bank</b> was randomly determined with the following probabilities:
+        <ul style="margin-bottom: 16px;">
+            <li>Low with <b>15%</b> probability</li>
+            <li>Medium with <b>70%</b> probability</li>
+            <li>High with <b>15%</b> probability</li>
+        </ul>
+        The state of <b>Your Bank</b> is determined as follows:
+        <ul style="margin-bottom: 16px;">
+            <li>With <b>70%</b> probability, Your Bank is in the same state as the Other Bank.</li>
+            <li>With <b>15%</b> probability each, Your Bank is in one of the other two states.</li>
+        </ul>
+    </li>
+    <li>You will play <b>{{ C.PART1_ROUNDS }}</b> games in Part 1. At the end of the experiment, one game from this part is randomly selected for payment (<b>1 point = {{C.REAL_WORLD_CURRENCY_PER_POINT}} dollar</b>).</li>
+</ol>
+
+<br>
+<div style="text-align:center; padding-top:30px;">
+    {{ next_button }}
+</div>
+
+
+{{ endblock }}

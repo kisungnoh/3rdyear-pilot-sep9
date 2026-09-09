@@ -1,0 +1,300 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 2 Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+.demo-row {
+    display: grid;
+    grid-template-columns: 400px;
+    gap: 12px;
+    align-items: start;
+    border: 1px solid #dde1e7;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 0 auto 20px;
+    width: fit-content;
+}
+
+/* Demo bar — matches the actual belief bar in Period 1 / Period 2 */
+.demo-bar-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+.demo-bar-wrap { margin: 18px 0 24px; }
+
+.demo-labels-row {
+    position: relative;
+    height: 20px;
+    margin-bottom: 10px;
+}
+.demo-pct-row {
+    position: relative;
+    height: 22px;
+    margin-top: 10px;
+}
+
+.demo-h-pct {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c2430;
+    white-space: nowrap;
+}
+.demo-h-label {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.demo-bar {
+    position: relative;
+    height: 50px;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    background: #e8eaed;
+}
+.demo-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.05s;
+}
+.demo-seg.withdraw { background: #5e35b1; }
+.demo-seg.stay     { background: #00838f; }
+
+.demo-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    margin-left: -10px;
+    cursor: ew-resize;
+    z-index: 5;
+}
+.demo-handle.demo-handle-hidden { display: none; }
+.demo-handle::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 5px;
+    margin-left: -2.5px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+}
+.demo-handle:hover::before,
+.demo-handle.active::before {
+    width: 6px;
+    margin-left: -3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.demo-caption { font-size: 14px; color: #888; text-align: center; margin-top: 10px; }
+
+/* Step indicator (reused from game pages) */
+.step-indicator { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.step {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 14px; font-weight: 600;
+}
+.step.active   { background: #e1f5fe; color: #0277bd; }
+.step.inactive { color: #b0b8c4; }
+.step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.step.active .step-num   { background: #0277bd; color: #fff; }
+.step.inactive .step-num { background: #e0e0e0; color: #9aa0a8; }
+.step-arrow { color: #c8cdd4; font-size: 14px; }
+</style>
+<br>
+<p>
+    In this part, you will play <strong>{{ part2_rounds }} more games</strong> and make the same decisions as before, with two additional tasks.
+</p>
+
+<h5>Additional Task 1</h5>
+<p>On the same screen where you make the <strong>Period 1</strong> decision, you will also be asked what you think the other participant will choose in Period 1.</p>
+<p>You will submit your assessment using a bar divided into two segments. Below is a preview of how the bar appears on the actual screen.</p>
+
+<!-- Demo bar — same layout as the actual belief bar in Period 1 -->
+<div class="demo-row">
+    <div class="step-indicator">
+        <div class="step active"><div class="step-num">1</div>Period 1</div>
+        <div class="step-arrow">›</div>
+        <div class="step inactive"><div class="step-num">2</div>Period 2</div>
+    </div>
+    <div class="demo-bar-section-title">How likely do you think the other participant will choose to withdraw or stay in Period 1?</div>
+    <div class="demo-bar-wrap">
+        <div class="demo-labels-row">
+            <div class="demo-h-label" id="demo_label_withdraw_p1" style="left:15%; color:#5e35b1;">Withdraw</div>
+            <div class="demo-h-label" id="demo_label_stay_p1" style="left:85%; color:#00838f;">Stay</div>
+        </div>
+        <div class="demo-bar" id="demo_bar_p1">
+            <div class="demo-seg withdraw" id="demo_seg_withdraw_p1" style="width:0%"></div>
+            <div class="demo-seg stay" id="demo_seg_stay_p1" style="width:0%"></div>
+            <div class="demo-handle demo-handle-hidden" id="demo_handle_p1" style="left:50%"></div>
+        </div>
+        <div class="demo-pct-row">
+            <div class="demo-h-pct" id="demo_pct_withdraw_p1" style="left:15%;">&nbsp;</div>
+            <div class="demo-h-pct" id="demo_pct_stay_p1" style="left:85%;">&nbsp;</div>
+        </div>
+        <div class="demo-caption">This is an example bar. Click the bar to show a divider.</div>
+    </div>
+</div>
+
+<p>
+    Please click anywhere on the bar to reveal the divider. Then, drag the divider left or right to indicate how likely you think each choice is, out of 100%. The left segment shows how likely you think the other participant will <b>withdraw</b> in Period 1, and the right segment shows how likely you think the other participant will <b>stay</b> in Period 1.
+</p>
+
+<div style="width:50%;height:1px;background:#dde1e7;margin:30px auto;"></div>
+
+<p>If you choose <strong>Stay</strong> in Period 1, you will also be asked, on the same screen where you make your <strong>Period 2</strong> decision, what you think the other participant will choose in Period 2.</p>
+<p>The other participant may have withdrawn in Period 1 and may not advance to Period 2. For this assessment purpose, please <b>assume</b> that the participant is now making the Period 2 decision.</p>
+
+<!-- Demo bar — same layout as the actual belief bar in Period 2 -->
+<div class="demo-row">
+    <div class="step-indicator">
+        <div class="step inactive"><div class="step-num">1</div>Period 1</div>
+        <div class="step-arrow">›</div>
+        <div class="step active"><div class="step-num">2</div>Period 2</div>
+    </div>
+    <div class="demo-bar-section-title">Suppose the other participant stayed in Period 1. How likely do you think the participant will choose to withdraw or stay in Period 2?</div>
+    <div class="demo-bar-wrap">
+        <div class="demo-labels-row">
+            <div class="demo-h-label" id="demo_label_withdraw_p2" style="left:15%; color:#5e35b1;">Withdraw</div>
+            <div class="demo-h-label" id="demo_label_stay_p2" style="left:85%; color:#00838f;">Stay</div>
+        </div>
+        <div class="demo-bar" id="demo_bar_p2">
+            <div class="demo-seg withdraw" id="demo_seg_withdraw_p2" style="width:0%"></div>
+            <div class="demo-seg stay" id="demo_seg_stay_p2" style="width:0%"></div>
+            <div class="demo-handle demo-handle-hidden" id="demo_handle_p2" style="left:50%"></div>
+        </div>
+        <div class="demo-pct-row">
+            <div class="demo-h-pct" id="demo_pct_withdraw_p2" style="left:15%;">&nbsp;</div>
+            <div class="demo-h-pct" id="demo_pct_stay_p2" style="left:85%;">&nbsp;</div>
+        </div>
+        <div class="demo-caption">This is an example bar. Click the bar to show a divider.</div>
+    </div>
+</div>
+
+<div id="divider-error" style="display:none; color:#c62828; background:#fff3e0; border:1px solid #e65100; border-radius:6px; padding:8px 14px; margin-bottom:8px;"></div>
+<div style="margin-top: 30px;">{{ next_button }}</div>
+
+<script>
+(function () {
+    function initDemoBar(suffix) {
+        var bar    = document.getElementById('demo_bar_' + suffix);
+        var handle = document.getElementById('demo_handle_' + suffix);
+        var segA   = document.getElementById('demo_seg_withdraw_' + suffix);
+        var segB   = document.getElementById('demo_seg_stay_' + suffix);
+        var pctA   = document.getElementById('demo_pct_withdraw_' + suffix);
+        var pctB   = document.getElementById('demo_pct_stay_' + suffix);
+        var labelA = document.getElementById('demo_label_withdraw_' + suffix);
+        var labelB = document.getElementById('demo_label_stay_' + suffix);
+
+        var value   = 50; // starting position, out of 100 (left segment = Withdraw)
+        var touched = false;
+        var dragging = false;
+
+        function render(v) {
+            value = Math.max(0, Math.min(100, v));
+            segA.style.width = value + '%';
+            segB.style.width = (100 - value) + '%';
+            handle.style.left = value + '%';
+            var midA = value / 2;
+            var midB = value + (100 - value) / 2;
+            pctA.style.left = midA + '%';
+            pctB.style.left = midB + '%';
+            labelA.style.left = midA + '%';
+            labelB.style.left = midB + '%';
+            pctA.textContent = value + ' %';
+            pctB.textContent = (100 - value) + ' %';
+        }
+
+        function pctFromClientX(clientX) {
+            var rect = bar.getBoundingClientRect();
+            var raw = ((clientX - rect.left) / rect.width) * 100;
+            return Math.round(raw);
+        }
+
+        function reveal() {
+            if (!touched) {
+                touched = true;
+                handle.classList.remove('demo-handle-hidden');
+            }
+        }
+
+        function startDrag(e) {
+            dragging = true;
+            handle.classList.add('active');
+            e.preventDefault();
+        }
+
+        function moveDrag(clientX) {
+            if (!dragging) return;
+            render(pctFromClientX(clientX));
+        }
+
+        function endDrag() {
+            dragging = false;
+            handle.classList.remove('active');
+        }
+
+        handle.addEventListener('mousedown', startDrag);
+        handle.addEventListener('touchstart', startDrag, { passive: false });
+
+        // First click/tap on the bar reveals the divider and jumps it to that position
+        bar.addEventListener('mousedown', function (e) {
+            if (e.target === handle) return;
+            reveal();
+            render(pctFromClientX(e.clientX));
+            startDrag(e);
+        });
+        bar.addEventListener('touchstart', function (e) {
+            if (e.target === handle) return;
+            reveal();
+            render(pctFromClientX(e.touches[0].clientX));
+            startDrag(e);
+        }, { passive: false });
+
+        window.addEventListener('mousemove', function (e) { moveDrag(e.clientX); });
+        window.addEventListener('touchmove', function (e) {
+            if (dragging) { moveDrag(e.touches[0].clientX); e.preventDefault(); }
+        }, { passive: false });
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+
+        return { isTouched: function () { return touched; } };
+    }
+
+    var barP1 = initDemoBar('p1');
+    var barP2 = initDemoBar('p2');
+
+    var nextButton = document.querySelector('.otree-btn-next');
+    var err = document.getElementById('divider-error');
+
+    nextButton.addEventListener('click', function (e) {
+        if (!barP1.isTouched() || !barP2.isTouched()) {
+            e.preventDefault();
+            err.textContent = "Please try both bars before continuing.";
+            err.style.display = "block";
+            return;
+        }
+        err.style.display = "none";
+    });
+}());
+</script>
+
+{{ endblock }}

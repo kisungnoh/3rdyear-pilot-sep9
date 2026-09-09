@@ -1,0 +1,93 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 2 Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+/* Collapsible payment rule */
+.payment-rule-toggle {
+    display: inline-block;
+    color: #1976D2;
+    cursor: pointer;
+    text-decoration: underline;
+    user-select: none;
+}
+.payment-rule-box {
+    display: none;
+    border-left: 4px solid #1976D2;
+    background: #f5f9ff;
+    padding: 14px 18px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+.payment-rule-box h6 { margin: 0 0 8px; font-size: 14px; color: #37474f; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.payment-rule-box ul { margin: 8px 0 8px 20px; padding: 0; }
+.payment-rule-box li { margin-bottom: 6px; }
+.payment-rule-highlight { background: #e3f0fb; font-size: 18px; border-radius: 4px; padding: 8px 12px; margin-top: 20px; }
+</style>
+
+<br>
+<h5>Earnings</h5>
+This part lasts for <strong>{{ part2_rounds }} games</strong>. At the end of today's experiment, the computer will randomly select <strong>three games</strong> for payment.</p>
+<ul>
+    <li><b>Selected game #1:</b> you will earn points based on the decision you make, exactly like in Part 1.</li>
+    <li><b>Selected game #2:</b> you will earn either <strong>0 or 4 points</strong>, based on your assessment about the other's <b>Period 1</b> decision.</li>
+    <li><b>Selected game #3:</b> you will earn either <strong>0 or 4 points</strong>, based on your assessment about the state of Your Bank.</li>
+</ul>
+<br>
+<p>
+    The payment rules for the two assessment tasks are designed purposefully by economists to <strong style="color: #0000ff;">maximize the chance of winning the prize when you submit what you truly think.</strong> If you'd like to see the technical details on the payment rule, you may <span class="payment-rule-toggle" id="rule_toggle">click here.</span>
+</p>
+<div class="payment-rule-box" id="rule_box1">
+    <h6>Payment rule - Assessment about the Other Participant's Period 1 Decision</h6>
+    <p>
+        The computer will randomly draw two numbers. Each number is between 0 and 100, and all numbers in this range are equally likely to be drawn. The two draws are independent, meaning that the outcome of one draw does not influence the other. 
+To determine your payment, the computer will compare these two numbers with the percentages you submitted using the bar.
+    </p>
+    <ul>
+        <li>If the other participant <strong>withdraws</strong> in Period 1: you will be rewarded if the percentage you submitted for the participant's withdrawal is larger than at least one of the two draws.</li>
+        <li>If the other participant <strong>stays</strong> in Period 1: you will be rewarded if the percentage you submitted for the participant staying is larger than at least one of the two draws.</li>
+    </ul>
+    <p>If this rule sounds confusing, <b>simply remember:</b></p>
+    <div class="payment-rule-highlight" style="color: #1565C0; font-weight: 700; text-align: center;">
+        Submitting your assessment truthfully will maximize your chance of winning the prize.
+    </div>
+</div>
+
+<div class="payment-rule-box" id="rule_box2">
+    <h6>Payment rule - Assessment about Your Bank's State</h6>
+    <p>
+        The computer will randomly draw two numbers. Each number is between 0 and 100, and all numbers in this range are equally likely to be drawn. The two draws are independent, meaning that the outcome of one draw does not influence the other.
+To determine your payment, the computer will first randomly pick one of the three states: Low, Medium, or High. Suppose the computer picks the Low state, and you submitted 29% as the likelihood of Low, which means 71% for NOT Low (i.e., Medium or High).
+    </p>
+    <ul>
+        <li>If the actual state was <b>Low</b>: you will get rewarded if the percentage you submitted (29%) for the Low state is larger than either one of the two draws.</li>
+        <li>If the actual state was <b>Medium</b> or <b>High</b>: you will get rewarded if the number you submitted for your bank NOT in the Low state (71%) is larger than either one of the two draws.</li>
+    </ul>
+    <p>The same logic applies when the computer picks your report about the Medium or High state instead. </p>
+    <p>If this rule sounds confusing, <b>simply remember:</b> </p>
+    <div class="payment-rule-highlight" style="color: #1565C0; font-weight: 700; text-align: center;">
+        Submitting your assessment truthfully will maximize your chance of winning the prize.
+    </div>
+</div>
+
+<br>
+<p>
+    Your earnings from the three selected games will then be displayed and
+    converted to dollars at a rate of <strong>1 point = {{C.REAL_WORLD_CURRENCY_PER_POINT}} dollar</strong>. <br> You do not know which games will be selected for payment, so it is in your best interest to <b>treat every game as if it is the one selected.</b>
+</p>
+
+
+<div style="margin-top: 30px;">{{ next_button }}</div>
+
+<script>
+document.getElementById('rule_toggle').addEventListener('click', function () {
+    var box1 = document.getElementById('rule_box1');
+    var box2 = document.getElementById('rule_box2');
+    var show = (box1.style.display !== 'block');
+    box1.style.display = show ? 'block' : 'none';
+    box2.style.display = show ? 'block' : 'none';
+});
+</script>
+
+{{ endblock }}

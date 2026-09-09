@@ -1,0 +1,149 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 1 Instructions{{ endblock }}
+
+{{ block content }}
+
+{{ include 'global/ProgressBar.html' }}
+
+<style>
+:root {
+    --low-color:  #C62828;
+    --med-color:  #E65100;
+    --high-color:  #2E7D32;
+    --card-bg:    #ffffff;
+    --page-bg:    #ffffff;
+    --border:     #dde1e7;
+    --text:       #1a1f2e;
+    --muted:      #6b7280;
+    --accent:     #37474f;
+    --radius:     10px;
+    --shadow:     0 2px 8px rgba(0,0,0,0.08);
+}
+
+body, .otree-body {
+    background: var(--page-bg) !important;
+    color: var(--text) !important;
+}
+
+/* ── Payoff table (matches FirstStage exactly) ── */
+.payoff-col {
+    width: 100%;
+    max-width: 480px;
+    margin: 24px auto;
+}
+.payoff-col-head {
+    padding: 9px 12px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+}
+.state-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+.payoff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+}
+.payoff-table th, .payoff-table td {
+    border: 0.5px solid var(--border);
+    padding: 10px 8px;
+    text-align: center;
+    color: var(--text);
+}
+.payoff-table thead th {
+    background: #f8f9fb;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+.payoff-table .row-header {
+    background: #f8f9fb;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    text-align: center;
+    padding-left: 8px;
+}
+.payoff-table col.col-label  { width: 60px; }
+.payoff-table col.col-action { width: 90px; }
+.payoff-table col.col-data   { width: auto; }
+.my-payoff { font-weight: 700; color: #0000ff; }
+
+.spaced-list li { margin-bottom: 8px; }
+.spaced-list li:last-child { margin-bottom: 0; }
+
+</style>
+<div class="payoff-col">
+    <div class="payoff-col-head">
+        <span class="state-dot" style="background:var(--med-color);"></span>
+        <span style="color:var(--med-color);">Medium State</span>
+    </div>
+    <table class="payoff-table" id="med-state-table">
+        <colgroup>
+            <col class="col-label">
+            <col class="col-action">
+            <col class="col-data">
+            <col class="col-data">
+            <col class="col-data">
+        </colgroup>
+        <thead>
+            <tr><th class="row-header" rowspan="2" colspan="2"></th><th colspan="3" style="font-weight:500;">Other</th></tr>
+            <tr><th>W</th><th>SW</th><th>SS</th></tr>
+        </thead>
+        <tbody>
+            <tr data-row="W">
+                <td class="row-header" rowspan="3" style="font-weight:700; white-space:nowrap;"><span class="my-payoff">You</span></td>
+                <td class="row-header">W</td>
+                <td>(<span class="my-payoff">{{C.ENDOWMENT}}</span>, {{C.ENDOWMENT}})</td>
+                <td>(<span class="my-payoff">{{C.ENDOWMENT}}</span>, {{sw_payoff}})</td>
+                <td>(<span class="my-payoff">{{C.ENDOWMENT}}</span>, {{C.FAIL_PAYOFF}})</td>
+            </tr>
+            <tr data-row="SW">
+                <td class="row-header">SW</td>
+                <td>(<span class="my-payoff">{{sw_payoff}}</span>, {{C.ENDOWMENT}})</td>
+                <td>(<span class="my-payoff">{{sw_payoff}}</span>, {{sw_payoff}})</td>
+                <td>(<span class="my-payoff">{{C.ENDOWMENT}}</span>, {{C.FAIL_PAYOFF}})</td>
+            </tr>
+            <tr data-row="SS">
+                <td class="row-header">SS</td>
+                <td>(<span class="my-payoff">{{C.FAIL_PAYOFF}}</span>, {{C.ENDOWMENT}})</td>
+                <td>(<span class="my-payoff">{{C.FAIL_PAYOFF}}</span>, {{C.ENDOWMENT}})</td>
+                <td>(<span class="my-payoff">{{C.SUCCESS_PAYOFF}}</span>, {{C.SUCCESS_PAYOFF}})</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>As before, the table above shows (<strong style="color: #0000ff"><em>your payoff</em></strong>, other's payoff), but now the bank state is <b>Medium</b>.</p>
+<ul class="spaced-list">
+    <li>If you choose <b>Withdraw</b> in Period 1 (<b>W</b>) → you will receive <b>{{C.ENDOWMENT}}</b>, regardless of the other's choice.</li>
+    <li>If you choose <b>Stay</b> in Period 1 <b>and Withdraw</b> in Period 2 (<b>SW</b>):
+        <ul style="margin-top: 4px; margin-bottom: 0;">
+            <li>You will receive <b>{{sw_payoff}}</b> if the other withdraws in either period (W or SW).</li>
+            <li>You will receive <b>{{C.ENDOWMENT}}</b> if the other stays in both periods (SS).</li>
+        </ul>
+    </li>
+    <li>If you choose <b>Stay</b> in Period 1 <b>and Stay</b> in Period 2 (<b>SS</b>):
+        <ul style="margin-top: 4px; margin-bottom: 0;">
+            <li>You will receive <b>{{C.FAIL_PAYOFF}}</b> if the other withdraws in either period (W or SW).</li>
+            <li>You will receive <b>{{C.SUCCESS_PAYOFF}}</b> if the other also stays in both periods (SS).</li>
+        </ul>
+    </li>
+</ul>
+
+<br>
+<p><b>Note:</b> Unlike in the Low or High state, the payoffs for <b>SW</b> or <b>SS</b> in the <b>Medium</b> state depends on the other participant's decisions as well as your decisions.</p>
+
+<br>
+
+<div style="text-align:center; padding-top:10px;">
+    {{ next_button }}
+</div>
+
+{{ endblock }}

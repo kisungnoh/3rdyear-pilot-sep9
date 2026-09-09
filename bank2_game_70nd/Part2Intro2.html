@@ -1,0 +1,278 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 2 Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+.demo-row {
+    display: grid;
+    grid-template-columns: 400px;
+    gap: 12px;
+    align-items: start;
+    border: 1px solid #dde1e7;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 0 auto 20px;
+    width: fit-content;
+}
+
+/* Demo bar — matches the actual state-belief bar in Period 1 */
+.demo-bar-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+.demo-bar-wrap { margin: 18px 0 24px; }
+
+.demo-labels-row {
+    position: relative;
+    height: 20px;
+    margin-bottom: 10px;
+}
+.demo-pct-row {
+    position: relative;
+    height: 22px;
+    margin-top: 10px;
+}
+
+.demo-h-pct {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c2430;
+    white-space: nowrap;
+}
+.demo-h-label {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.demo-bar {
+    position: relative;
+    height: 50px;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    background: #e8eaed;
+}
+.demo-seg { height: 100%; }
+.demo-seg.low  { background: #C62828; }
+.demo-seg.med  { background: #E65100; }
+.demo-seg.high { background: #2E7D32; }
+
+.demo-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    margin-left: -10px;
+    cursor: ew-resize;
+    z-index: 5;
+}
+.demo-handle.demo-handle-hidden { display: none; }
+.demo-handle::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 5px;
+    margin-left: -2.5px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+}
+.demo-handle:hover::before,
+.demo-handle.active::before {
+    width: 6px;
+    margin-left: -3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.demo-caption { font-size: 14px; color: #888; text-align: center; margin-top: 10px; }
+
+/* Step indicator (reused from game pages) */
+.step-indicator { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.step {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 14px; font-weight: 600;
+}
+.step.active   { background: #e1f5fe; color: #0277bd; }
+.step.inactive { color: #b0b8c4; }
+.step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.step.active .step-num   { background: #0277bd; color: #fff; }
+.step.inactive .step-num { background: #e0e0e0; color: #9aa0a8; }
+.step-arrow { color: #c8cdd4; font-size: 14px; }
+</style>
+<br>
+<h5>Additional Task 2</h5>
+<p>On the same screen, you will also be asked what you think the state of Your Bank is.</p>
+<p>You will submit your assessment using a bar divided into three segments. Below is a preview of how the bar appears on the actual screen.</p>
+
+<!-- Demo bar — same layout as the actual state-belief bar in Period 1 -->
+<div class="demo-row">
+    <div class="step-indicator">
+        <div class="step active"><div class="step-num">1</div>Period 1</div>
+        <div class="step-arrow">›</div>
+        <div class="step inactive"><div class="step-num">2</div>Period 2</div>
+    </div>
+    <div class="demo-bar-section-title">How likely do you think Your Bank is in each state?</div>
+    <div class="demo-bar-wrap">
+        <div class="demo-labels-row">
+            <div class="demo-h-label" id="demo_label_low"  style="left:16.7%; color:#C62828;">Low</div>
+            <div class="demo-h-label" id="demo_label_med"  style="left:50%;   color:#E65100;">Medium</div>
+            <div class="demo-h-label" id="demo_label_high" style="left:83.3%; color:#2E7D32;">High</div>
+        </div>
+        <div class="demo-bar" id="demo_bar">
+            <div class="demo-seg low"  id="demo_seg_low"  style="width:0%"></div>
+            <div class="demo-seg med"  id="demo_seg_med"  style="width:0%"></div>
+            <div class="demo-seg high" id="demo_seg_high" style="width:0%"></div>
+            <div class="demo-handle demo-handle-hidden" id="demo_handle_low"  style="left:0%"></div>
+            <div class="demo-handle demo-handle-hidden" id="demo_handle_high" style="left:0%"></div>
+        </div>
+        <div class="demo-pct-row">
+            <div class="demo-h-pct" id="demo_pct_low"  style="left:16.7%;">&nbsp;</div>
+            <div class="demo-h-pct" id="demo_pct_med"  style="left:50%;">&nbsp;</div>
+            <div class="demo-h-pct" id="demo_pct_high" style="left:83.3%;">&nbsp;</div>
+        </div>
+        <div class="demo-caption">This is an example bar. Click the bar to show two dividers.</div>
+    </div>
+</div>
+
+<p>
+    Click the bar to set the first divider, then click again to set the second. Drag either divider left or right to indicate how likely you think each state is, out of 100%. The left segment shows how likely you think Your Bank is in the <b>Low</b> state, the middle segment shows how likely you think Your Bank is in the <b>Medium</b> state, and the right segment shows how likely you think Your Bank is in the <b>High</b> state.
+</p>
+
+<div id="divider-error" style="display:none; color:#c62828; background:#fff3e0; border:1px solid #e65100; border-radius:6px; padding:8px 14px; margin-bottom:8px;"></div>
+<div style="margin-top: 30px;">{{ next_button }}</div>
+
+<script>
+(function () {
+    var bar        = document.getElementById('demo_bar');
+    var segLow     = document.getElementById('demo_seg_low');
+    var segMed     = document.getElementById('demo_seg_med');
+    var segHigh    = document.getElementById('demo_seg_high');
+    var handleLow  = document.getElementById('demo_handle_low');
+    var handleHigh = document.getElementById('demo_handle_high');
+    var pctLowEl   = document.getElementById('demo_pct_low');
+    var pctMedEl   = document.getElementById('demo_pct_med');
+    var pctHighEl  = document.getElementById('demo_pct_high');
+    var labelLowEl  = document.getElementById('demo_label_low');
+    var labelMedEl  = document.getElementById('demo_label_med');
+    var labelHighEl = document.getElementById('demo_label_high');
+
+    var phase = 0; // 0 = no dividers set, 1 = low set, 2 = both set
+    var lowPct = null, highPct = null, dragging = null;
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function pctFromClientX(clientX) {
+        var rect = bar.getBoundingClientRect();
+        return clamp(Math.round(((clientX - rect.left) / rect.width) * 100), 0, 100);
+    }
+
+    function render() {
+        if (lowPct === null) return;
+        var low  = lowPct;
+        var high = highPct !== null ? 100 - highPct : null;
+        var med  = highPct !== null ? highPct - lowPct : null;
+
+        segLow.style.width  = low + '%';
+        segMed.style.width  = (highPct !== null ? med : 0) + '%';
+        segHigh.style.width = (highPct !== null ? high : 0) + '%';
+
+        handleLow.style.left = low + '%';
+        if (highPct !== null) handleHigh.style.left = highPct + '%';
+
+        var midLow = low / 2;
+        labelLowEl.style.left = midLow + '%';
+        pctLowEl.style.left = midLow + '%';
+        pctLowEl.textContent = low + ' %';
+
+        if (highPct !== null) {
+            var midMed  = lowPct + med / 2;
+            var midHigh = highPct + high / 2;
+            labelMedEl.style.left  = midMed + '%';
+            labelHighEl.style.left = midHigh + '%';
+            pctMedEl.style.left  = midMed + '%';
+            pctHighEl.style.left = midHigh + '%';
+            pctMedEl.textContent  = med + ' %';
+            pctHighEl.textContent = high + ' %';
+        }
+    }
+
+    function pressAt(p) {
+        if (phase === 0) {
+            lowPct = p; phase = 1;
+            handleLow.classList.remove('demo-handle-hidden');
+            dragging = 'low';
+        } else if (phase === 1) {
+            highPct = clamp(p, lowPct, 100); phase = 2;
+            handleHigh.classList.remove('demo-handle-hidden');
+            dragging = 'high';
+        } else {
+            dragging = Math.abs(p - lowPct) <= Math.abs(p - highPct) ? 'low' : 'high';
+        }
+        render();
+    }
+
+    function moveTo(p) {
+        if (!dragging) return;
+        if (dragging === 'low') lowPct  = clamp(p, 0, highPct !== null ? highPct : 100);
+        else                    highPct = clamp(p, lowPct, 100);
+        render();
+    }
+
+    function endDrag() {
+        dragging = null;
+        handleLow.classList.remove('active');
+        handleHigh.classList.remove('active');
+    }
+
+    bar.addEventListener('mousedown', function (e) {
+        if (e.target === handleLow || e.target === handleHigh) return;
+        pressAt(pctFromClientX(e.clientX));
+    });
+    handleLow.addEventListener('mousedown', function (e) { dragging = 'low'; handleLow.classList.add('active'); e.stopPropagation(); });
+    handleHigh.addEventListener('mousedown', function (e) { dragging = 'high'; handleHigh.classList.add('active'); e.stopPropagation(); });
+    window.addEventListener('mousemove', function (e) { moveTo(pctFromClientX(e.clientX)); });
+    window.addEventListener('mouseup', endDrag);
+
+    bar.addEventListener('touchstart', function (e) {
+        if (e.target === handleLow || e.target === handleHigh) return;
+        e.preventDefault();
+        pressAt(pctFromClientX(e.touches[0].clientX));
+    }, { passive: false });
+    handleLow.addEventListener('touchstart', function (e) { e.preventDefault(); dragging = 'low'; handleLow.classList.add('active'); }, { passive: false });
+    handleHigh.addEventListener('touchstart', function (e) { e.preventDefault(); dragging = 'high'; handleHigh.classList.add('active'); }, { passive: false });
+    window.addEventListener('touchmove', function (e) {
+        if (dragging) { moveTo(pctFromClientX(e.touches[0].clientX)); e.preventDefault(); }
+    }, { passive: false });
+    window.addEventListener('touchend', endDrag);
+
+    var nextButton = document.querySelector('.otree-btn-next');
+    var err = document.getElementById('divider-error');
+
+    nextButton.addEventListener('click', function (e) {
+        if (phase < 2) {
+            e.preventDefault();
+            err.textContent = "Please try the bar before continuing.";
+            err.style.display = "block";
+            return;
+        }
+        err.style.display = "none";
+    });
+}());
+</script>
+
+{{ endblock }}

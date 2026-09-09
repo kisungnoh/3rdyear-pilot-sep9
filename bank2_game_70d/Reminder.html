@@ -1,0 +1,180 @@
+<style>
+.stat-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px auto 20px;
+    table-layout: fixed;
+}
+.stat-table th, .stat-table td {
+    border: 0.5px solid #dde1e7;
+    text-align: center;
+    color: #1a1f2e;
+    padding: 8px 18px;
+}
+.stat-table thead th {
+    background: #f8f9fb;
+    font-weight: 600;
+}
+.stat-table tbody td {
+    background: #ffffff;
+}
+.stat-table .row-label {
+    background: #f8f9fb;
+    font-weight: 600;
+}
+.stat-table .row-label-primary {
+    font-weight: 700;
+    color: #3949ab;
+    white-space: nowrap;
+}
+.corr-table th, .corr-table td { padding: 8px 10px; }
+.rec-table { width: 98%; margin-left: 0; margin-right: auto; }
+.rec-table thead th:last-child { text-align: left; }
+.rec-table tbody td:first-child { font-weight: 700; }
+.rec-table tbody td:last-child { text-align: left; }
+.rec-table ul { margin: 0; padding-left: 18px; line-height: 1.6; }
+</style>
+
+<div style="background:#ffffff; border:2.5px solid #7986cb; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(121,134,203,0.15); margin-top:40px; max-width:900px; margin-left:auto; margin-right:auto;">
+
+    <!-- Card header -->
+    <div style="background:#f8f9fb; border-bottom:1px solid #7986cb; padding:10px 16px; font-size:13px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:#7986cb;">
+        Reminder
+    </div>
+
+    <div style="padding:20px 24px;">
+        
+        <ol style="line-height: 1.6;">
+            <li style="margin-bottom: 10px;">You will start a game with a randomly paired participant, who is likely to change from game to game.</li>
+            <li style="margin-bottom: 10px;">As a customer at a bank, you will decide whether to <b>withdraw</b> your money or <b>stay</b> with the bank across two periods:
+                <ul>
+                    <li><b>W</b>: Withdraw (Period 1) </li>
+                    <li><b>SW</b>: Stay (Period 1) → Withdraw (Period 2)</li>
+                    <li><b>SS</b>: Stay (Period 1) → Stay (Period 2)</li>
+                </ul>
+            </li>
+            <li style="margin-bottom: 10px;">Your payoffs depend on Your Bank's state, your decision, and the decision of the other participant you are paired with.</li>
+            <li style="margin-bottom: 10px;">In today's experiment, the state of either the Other Bank or Your Bank is <b>unknown</b>. Therefore, you will need to make decisions (withdraw or stay) in each period under the uncertain state.</li>
+            <li style="margin-bottom: 10px;">To help you make decisions, you will see the <b>Other Bank withdrawals</b>, which show the final number of customers at the Other Bank who chose <b>W</b> or <b>SW (0, 1, or 2)</b>. 
+                <ul style="margin-bottom: 10px;">
+                    <li>A new Other Bank will be selected for every game you play, so this number may change from game to game.</li>
+                    <li>Participants at the Other Bank <b>knew</b> their bank's state exactly when making decisions.</li>
+                </ul>
+            </li>
+            <li style="margin-bottom: 10px;">The state of the <b>Other Bank</b> was randomly determined with the following probabilities:
+                <table class="stat-table">
+                    <colgroup>
+                        <col style="width:180px;">
+                        <col style="width:150px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Other Bank's State</th>
+                            <th>Probability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Low</td>
+                            <td>{{C.LOW_PROB}}%</td>
+                        </tr>
+                        <tr>
+                            <td>Medium</td>
+                            <td>{{C.MEDIUM_PROB}}%</td>
+                        </tr>
+                        <tr>
+                            <td>High</td>
+                            <td>{{C.HIGH_PROB}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                The state of <b>Your Bank</b> is determined as follows:
+                <ul style="margin-bottom: 10px;">
+                    <li>With <b>70%</b> probability, Your Bank is in the same state as the Other Bank.</li>
+                    <li>With <b>15%</b> probability each, Your Bank is in one of the other two states.</li>
+                </ul>
+                <table class="stat-table corr-table">
+                    <colgroup>
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" colspan="2"></th>
+                            <th colspan="3">Other Bank's State</th>
+                        </tr>
+                        <tr>
+                            <th>Low</th>
+                            <th>Medium</th>
+                            <th>High</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3" class="row-label row-label-primary">Your Bank's <br> State</td>
+                            <td class="row-label">Low</td>
+                            <td>{{C.STATE_CORR}}%</td>
+                            <td>{{unmatched_corr}}%</td>
+                            <td>{{unmatched_corr}}%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Medium</td>
+                            <td>{{unmatched_corr}}%</td>
+                            <td>{{C.STATE_CORR}}%</td>
+                            <td>{{unmatched_corr}}%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">High</td>
+                            <td>{{unmatched_corr}}%</td>
+                            <td>{{unmatched_corr}}%</td>
+                            <td>{{C.STATE_CORR}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li style="margin-bottom: 16px;">If you stay in Period 1, you will receive a <b>recommendation</b> when making decision in Period 2.
+                    <table class="stat-table rec-table">
+                        <colgroup>
+                            <col style="width:150px;">
+                            <col style="width:auto;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Recommendation</th>
+                                <th>When you receive it</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Withdraw</td>
+                                <td>
+                                    <ul>
+                                        <li>The state of Your Bank is <b>Low</b>, or</li>
+                                        <li>The state of Your Bank is <b>Medium</b>, and the other participant chose <b>Withdraw</b> in Period 1</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Stay</td>
+                                <td>
+                                    <ul>
+                                        <li>The state of Your Bank is <b>High</b>, or</li>
+                                        <li>The state of Your Bank is <b>Medium</b>, and the other participant chose <b>Stay</b> in Period 1</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            {{ if round_number > C.PART1_ROUNDS }}
+            <li>You will play <b>{{ part2_rounds }}</b> games in Part 2. At the end of the experiment, three games from this part are randomly selected for payment (<b>1 point = {{C.REAL_WORLD_CURRENCY_PER_POINT}} dollar</b>).</li>
+            {{ else }}
+            <li>You will play <b>{{ C.PART1_ROUNDS }}</b> games in Part 1. At the end of the experiment, one game from this part is randomly selected for payment (<b>1 point = {{C.REAL_WORLD_CURRENCY_PER_POINT}} dollar</b>).</li>
+            {{ endif }}
+        </ol>
+    </div>
+</div>
+

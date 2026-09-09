@@ -1,0 +1,115 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 1 Instructions{{ endblock }}
+
+{{ block content }}
+
+{{ include 'global/ProgressBar.html' }}
+
+<style>
+:root {
+    --text: #1a1f2e;
+}
+
+.card-panel-body { padding: 16px; }
+
+.demo-row {
+    display: grid;
+    grid-template-columns: 400px;
+    gap: 12px;
+    align-items: start;
+    border: 1px solid #dde1e7;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 0 auto 20px;
+    width: fit-content;
+}
+
+/* Step indicator (reused from game pages) */
+.step-indicator { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.step {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 14px; font-weight: 600;
+}
+.step.active   { background: #e1f5fe; color: #0277bd; }
+.step.inactive { color: #b0b8c4; }
+.step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.step.active .step-num   { background: #0277bd; color: #fff; }
+.step.inactive .step-num { background: #e0e0e0; color: #9aa0a8; }
+.step-arrow { color: #c8cdd4; font-size: 14px; }
+
+.demo-caption { font-size: 14px; color: #888; text-align: center;}
+
+/* Decision mock */
+.mock-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mock-radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+}
+</style>
+
+<br>
+<h5>Decisions</h5>
+<br>
+<p>In each game, you will make decisions over <strong>two periods</strong>.</p>
+<p>In <strong>Period 1</strong>, you and the other participant in your bank simultaneously choose whether to <strong>withdraw</strong> or <strong>stay</strong>.</p>
+<ul>
+    <li>If you <strong>withdraw</strong>, you immediately take out your 10 points (entire deposits) and make no more decision in this game.</li>
+    <li>If you <strong>stay</strong>, your deposit remains in the bank and you advance to <strong>Period 2</strong>.</li>
+</ul>
+
+<div class="demo-row">
+    <div class="step-indicator">
+        <div class="step active"><div class="step-num">1</div>Period 1</div>
+        <div class="step-arrow">›</div>
+        <div class="step inactive"><div class="step-num">2</div>Period 2</div>
+    </div>
+    <div class="card-panel-body">
+        <b>Please make your choice:</b>
+        <div class="mock-choice" style="margin-top: 10px;">
+            <label class="mock-radio"><input type="radio" name="mock_decision" value="withdraw"> Withdraw</label>
+            <label class="mock-radio"><input type="radio" name="mock_decision" value="stay"> Stay</label>
+        </div>
+    </div>
+    <div class="demo-caption">Example decision for Period 1.</div>
+</div>
+
+<hr>
+<p>If you advance to <strong>Period 2</strong>, you will choose once again whether to <strong>withdraw</strong> or <strong>stay</strong>.</p>
+<div class="demo-row">
+    <div class="step-indicator">
+        <div class="step inactive"><div class="step-num">1</div>Period 1</div>
+        <div class="step-arrow">›</div>
+        <div class="step active"><div class="step-num">2</div>Period 2</div>
+    </div>
+    <div class="card-panel-body">
+        <b>Please make your choice:</b>
+        <div class="mock-choice" style="margin-top: 10px;">
+            <label class="mock-radio"><input type="radio" name="mock_decision" value="withdraw"> Withdraw</label>
+            <label class="mock-radio"><input type="radio" name="mock_decision" value="stay"> Stay</label>
+        </div>
+    </div>
+    <div class="demo-caption">You will see this screen only if you click "Stay" in Period 1.</div>
+</div>
+
+<br>
+
+<div style="text-align:center; padding-top:30px;">
+    {{ next_button }}
+</div>
+
+
+{{ endblock }}

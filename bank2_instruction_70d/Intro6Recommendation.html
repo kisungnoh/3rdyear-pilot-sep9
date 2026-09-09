@@ -1,0 +1,128 @@
+{{ extends "global/Page.html" }}
+{{ block title }}Part 1 Instructions{{ endblock }}
+
+{{ block content }}
+
+{{ include 'global/ProgressBar.html' }}
+
+<style>
+:root {
+    --low-color:  #C62828;
+    --med-color:  #E65100;
+    --high-color:  #2E7D32;
+    --card-bg:    #ffffff;
+    --page-bg:    #ffffff;
+    --border:     #dde1e7;
+    --text:       #1a1f2e;
+    --muted:      #6b7280;
+    --accent:     #37474f;
+    --radius:     10px;
+    --shadow:     0 2px 8px rgba(0,0,0,0.08);
+}
+
+body, .otree-body {
+    background: var(--page-bg) !important;
+    color: var(--text) !important;
+}
+
+/* ── Simple stat tables ── */
+.stat-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 0 auto 28px;
+    table-layout: fixed;
+}
+.stat-table th, .stat-table td {
+    border: 0.5px solid var(--border);
+    text-align: center;
+    color: var(--text);
+}
+.stat-table thead th {
+    background: #f8f9fb;
+    font-weight: 600;
+}
+.stat-table tbody td {
+    background: #ffffff;
+}
+.stat-table .row-label {
+    background: #f8f9fb;
+    font-weight: 600;
+}
+.stat-table .row-label-primary {
+    font-weight: 700;
+    color: #3949ab;
+    white-space: nowrap;
+}
+
+.prob-table th, .prob-table td { padding: 8px 18px; }
+.prob-table tbody td { padding: 9px 14px; }
+
+.corr-table th, .corr-table td { padding: 8px 10px; }
+.corr-table tbody td { padding: 9px 8px; }
+
+.rec-table { width: 98%; margin-left: 0; margin-right: auto; }
+.rec-table th, .rec-table td { padding: 9px 14px; }
+.rec-table thead th:last-child { text-align: left; }
+.rec-table tbody td:first-child { font-weight: 700; }
+.rec-table tbody td:last-child { text-align: left; }
+.rec-table ul { margin: 0; padding-left: 18px; line-height: 1.8; }
+
+</style>
+
+<br>
+<h5>3) Recommendation</h5>
+<br>
+<p>If you choose <b>Stay</b> in Period 1, you will receive a recommendation from a computerized agent when making decision in <b>Period 2</b>. The agent observes Your Bank's state and the other participant's choice in Period 1, and sends a message according to the rule below:</p>
+
+<table class="stat-table rec-table">
+    <colgroup>
+        <col style="width:180px;">
+        <col style="width:auto;">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Recommendation</th>
+            <th>When you receive it</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Withdraw</td>
+            <td>
+                <ul>
+                    <li>The state of Your Bank is <b>Low</b>, or</li>
+                    <li>The state of Your Bank is <b>Medium</b>, and the other participant chose <b>Withdraw</b> in Period 1</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Stay</td>
+            <td>
+                <ul>
+                    <li>The state of Your Bank is <b>High</b>, or</li>
+                    <li>The state of Your Bank is <b>Medium</b>, and the other participant chose <b>Stay</b> in Period 1</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p>The recommendation does not reveal which specific case applies. However, the recommendation is always truthful.</p>
+
+<br>
+<p><strong>Please note:</strong></p>
+<ul style="line-height: 1.8;">
+    <li>The recommendation arrives in Period 2. You <b>will not</b> receive a recommendation if you choose <b>Withdraw</b> in Period 1.</li>
+</ul>
+
+<br>
+<hr style="margin: 24px 0;">
+<p>These three pieces of information, the Other Bank withdrawals, how the bank state is determined, and the recommendation, may help you have a better idea about Your Bank's state and make better decisions (withdraw, stay) in Period 1 and 2.</p>
+
+<br>
+<div style="text-align:center; padding-top:10px;">
+    {{ next_button }}
+</div>
+
+
+{{ endblock }}
